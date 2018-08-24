@@ -1,0 +1,6 @@
+authors = ["Daniel Harasim <daniel.harasim@gmx.de>"]
+name = "TikzQTrees"
+uuid = "9a085dbc-a7c0-11e8-3163-09c6f3438ebc"
+version = "0.1.0"
+
+[deps]
