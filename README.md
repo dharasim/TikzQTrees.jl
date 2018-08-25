@@ -8,7 +8,7 @@ Plotting trees using [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.
 ## Installation
 The package can be installed by:
 ```
-(v0.7) pkg> add TikzQTrees
+(v0.7) pkg> add https://github.com/dharasim/TikzQTrees.jl
 ```
 
 TikzQTrees is build on top of [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl). If you can install TikzPictures, you should also be able to use TikzQTrees.
@@ -31,7 +31,7 @@ end
 TikzQTrees are converted into TikzPictures to show them in the Juno plot pane and IJulia notebooks. In the REPL, the tex code of the tikz-qtree is printed.
 
 ```julia
-julia> using TikzQTrees
+julia> using TikzQTrees, TikzPictures
 
 julia> tree = SimpleTree("root", [SimpleTree("left"), SimpleTree("right")]);
 
@@ -54,7 +54,7 @@ This package additionally provides the macro `@qtree` for pretty printing of Jul
 
 ```julia
 julia> qt = @qtree a * (b+c) == a*b + a*c
-[.== [.* a [.+ b c ]][.+ [.* a b ][.* a c ]]]
+[.{==} [.{*} {a} [.{+} {b} {c} ] ] [.{+} [.{*} {a} {b} ] [.{*} {a} {c} ] ] ]
 
 julia> save(SVG("distributivity"), TikzPicture(qt))
 
