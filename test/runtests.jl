@@ -18,4 +18,4 @@ qt = @qtree function foo(a)
     d = (a - 2)^2
     e = 2.71
 end
-@test string(qt) == "[.{function} [.{foo} {a} ] [.{block} {line21} [.{=} {d} [.{\\textasciicircum} [.{-} {a} {2} ] {2} ] ] {line22} [.{=} {e} {2.71} ] ] ] "
+@test string(qt) == "[.{function} [.{foo} {a} ] [.{block} {line18} [.{=} {d} [.{\\textasciicircum} [.{-} {a} {2} ] {2} ] ] {line19} [.{=} {e} {2.71} ] ] ] "
