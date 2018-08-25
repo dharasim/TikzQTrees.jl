@@ -1,7 +1,6 @@
 # TikzQTrees.jl
 
 [![Build Status](https://travis-ci.org/dharasim/TikzQTrees.jl.svg?branch=master)](https://travis-ci.org/dharasim/TikzQTrees.jl)
-[![Coverage Status](https://coveralls.io/repos/dharasim/TikzQTrees.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/dharasim/TikzQTrees.jl?branch=master)
 [![codecov.io](http://codecov.io/github/dharasim/TikzQTrees.jl/coverage.svg?branch=master)](http://codecov.io/github/dharasim/TikzQTrees.jl?branch=master)
 
 Plotting trees using [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl) and the latex package [tikz-qtree](https://www.ctan.org/pkg/tikz-qtree).
