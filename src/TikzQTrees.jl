@@ -4,6 +4,7 @@ import TikzPictures: TikzPicture
 import Base: show, showable, iterate, eltype, IteratorSize, map
 
 export TikzQTree, value, children, leafs, @qtree
+export SimpleTree
 
 ######################
 ### Abstract Trees ###
