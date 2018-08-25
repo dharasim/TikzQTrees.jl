@@ -103,7 +103,7 @@ function show(io::IO, t::TikzQTree)
         foreach(children(t)) do child
             print(io, child)
         end
-        print(io, ']')
+        print(io, ']', ' ')
     end
 end
 
@@ -119,15 +119,18 @@ function TikzPicture(t::TikzQTree)
 end
 
 # construct TikzQTrees from Julia expressions using @qtree
-function _tree(x)
-    SimpleTree(x, Any)
-end
+latex_string(x...) = string('{', x..., '}')
+
+_tree(x) = SimpleTree(latex_string(x))
+
+_tree(n::LineNumberNode) = SimpleTree(latex_string("line", n.line))
 
 function _tree(expr::Expr)
     if expr.head == :call
-        SimpleTree{Any}(expr.args[1], map(_tree, expr.args[2:end]))
+        head = expr.args[1] == :^ ? "\\textasciicircum" : expr.args[1]
+        SimpleTree(latex_string(head), map(_tree, expr.args[2:end]))
     else
-        SimpleTree{Any}(expr.head, map(_tree, expr.args))
+        SimpleTree(latex_string(expr.head), map(_tree, expr.args))
     end
 end
 
