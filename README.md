@@ -8,7 +8,7 @@ The package can be installed by:
 (v0.7) pkg> add TikzQTrees
 ```
 
-This package is build on top of [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl). If you can install TikzPictures, you should also be able to use TikzQTrees.
+TikzQTrees is build on top of [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl). If you can install TikzPictures, you should also be able to use TikzQTrees.
 
 ## Usage
 
@@ -19,7 +19,7 @@ The package implements a wrapper type `TikzQTree` of tree data types which imple
 It also provides `SimpleTree`, an example of a type that can be wrapped into `TikzQTree`:
 
 ```julia
-mutable struct SimpleTree{T} <: AbstractTree{T}
+mutable struct SimpleTree{T}
     value    :: T
     children :: Vector{SimpleTree{T}}
 end
@@ -41,7 +41,9 @@ julia> save(SVG("test_tree"), TikzPicture(TikzQTree(tree)))
 
 The saved plot is:
 
-![test tree](tree_plots/test_tree.svg)
+<p align="center">
+  <img src="tree_plots/test_tree.svg" width="140"/>
+</p>
 
 ## One more thing
 
@@ -54,5 +56,6 @@ julia> qt = @qtree a * (b+c) == a*b + a*c
 julia> save(SVG("distributivity"), TikzPicture(qt))
 
 ```
-
-![distributivity](tree_plots/distributivity.svg)
+<p align="center">
+  <img src="tree_plots/distributivity.svg" width="300"/>
+</p>
