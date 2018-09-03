@@ -28,14 +28,18 @@ abstract type AbstractTree{T} end
 
 Returns the value of the root of the tree
 """
-function value end
+function value(tree) 
+    tree.value
+end
 
 """
     children(tree)
 
 Returns an iterator over the children of the root of the tree
 """
-function children end
+function children(tree)
+    tree.children
+end
 
 isleaf(tree) = isempty(children(tree))
 
