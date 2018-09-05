@@ -1,10 +1,17 @@
 module TikzQTrees
 
+include("tree_from_csv.jl")
+
+using TikzPictures
+using CSV
+using LaTeXStrings
+
 import TikzPictures: TikzPicture
 import Base: show, showable, iterate, eltype, IteratorSize, map
 
-export TikzQTree, value, children, leafs, @qtree
-export SimpleTree
+export TikzQTree, SimpleTree, value, children, isleaf, leafs, depth, @qtree
+export matrix_to_tree, plot_jazz_tree
+
 
 ######################
 ### Abstract Trees ###
@@ -28,7 +35,7 @@ abstract type AbstractTree{T} end
 
 Returns the value of the root of the tree
 """
-function value(tree) 
+function value(tree)
     tree.value
 end
 
@@ -42,6 +49,10 @@ function children(tree)
 end
 
 isleaf(tree) = isempty(children(tree))
+
+function depth(tree)
+    isleaf(tree) ? 1 : 1 + maximum(depth(c) for c in children(tree))
+end
 
 eltype(Tree::Type{<:AbstractTree{T}}) where T = Tree
 IteratorSize(::Type{<:AbstractTree{T}}) where T = Base.SizeUnknown()
@@ -88,7 +99,13 @@ end
 ###################
 
 struct TikzQTree{T} <: AbstractTree{T}
-    tree :: T
+    tree        :: T
+    align_leafs :: Bool
+    title       :: Union{String, Nothing}
+
+    function TikzQTree(tree::T; align_leafs=false, title=nothing) where T
+        new{T}(tree, align_leafs, title)
+    end
 end
 
 # implement tree interface
@@ -119,7 +136,31 @@ function show(io::IO, ::MIME"image/svg+xml", t::TikzQTree)
 end
 
 function TikzPicture(t::TikzQTree)
-    TikzPicture(string("\\Tree ", t), preamble="\\usepackage{tikz-qtree}")
+    title_node = if t.title != nothing
+        # "\\node[align=center, font=\\bfseries, yshift=2em] (title) at (current bounding box.north) {$(t.title)};\n"
+        "\\node[align=center, font=\\bfseries] (title) at (0,1) {$(t.title)};\n"
+    else
+        ""
+    end
+
+    if t.align_leafs
+        d = depth(t) - 1
+        TikzPicture(
+            string(
+                "\\tikzset{frontier/.style={distance from root=$d*30pt}}\n",
+                title_node,
+                "\\Tree ",
+                t
+            ),
+            options = "level distance=30pt",
+            preamble="\\usepackage{tikz-qtree}"
+        )
+    else
+        TikzPicture(
+            string(title_node, "\\Tree ", t),
+            preamble="\\usepackage{tikz-qtree}"
+        )
+    end
 end
 
 # construct TikzQTrees from Julia expressions using @qtree
