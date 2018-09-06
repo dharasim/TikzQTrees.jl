@@ -6,9 +6,9 @@
 Plotting trees using [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl) and the latex package [tikz-qtree](https://www.ctan.org/pkg/tikz-qtree).
 
 ## Installation
-The package can be installed by:
+Install the latest version of this package by:
 ```
-(v0.7) pkg> add https://github.com/dharasim/TikzQTrees.jl
+(v0.7) pkg> add https://github.com/dharasim/TikzQTrees.jl#master
 ```
 
 TikzQTrees is build on top of [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl). If you can install TikzPictures, you should also be able to use TikzQTrees.

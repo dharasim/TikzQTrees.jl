@@ -63,7 +63,8 @@ function convert_jazz_notation(jazz_chord::Union{AbstractString,Missing})
         "7"     => "^7",
         "6"     => "^6",
         "%"     => "\\emptyset",
-        "#"     => "\\sharp "
+        "#"     => "\\sharp ",
+        "b"     => "\\flat"
     )
 
     latexstring(
@@ -94,8 +95,10 @@ end
 
 function plot_jazz_tree(csv_file::AbstractString; format=:pdf)
     formats = (pdf=PDF, svg=SVG, tex=TEX, tikz=TIKZ)
-    tree = read_jazz_tree(csv_file)
-    save(getproperty(formats, format)(tree.title), TikzPicture(tree))
+    save(
+        getproperty(formats, format)(splitext(csv_file)[1]),
+        TikzPicture(read_jazz_tree(csv_file))
+    )
 end
 
 
