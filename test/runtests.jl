@@ -32,3 +32,6 @@ end
 
     true
 end
+
+str = "[.DP [.D the ] [.NP [.N pictures ] [.PP [.P of ] [.NP Mary ] ] ] ] "
+@test string(qtree(str)) == str
