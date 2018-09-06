@@ -25,7 +25,7 @@ end
 
 @test begin
     TikzQTree(
-        matrix_to_tree(Matrix(CSV.read(joinpath(@__DIR__(), "example_phrase.csv"), delim=';', datarow=1))),
+        qtree(Matrix(CSV.read(joinpath(@__DIR__(), "example_phrase.csv"), delim=';', datarow=1))),
         align_leafs = true,
         title = "Example phrase"
     )

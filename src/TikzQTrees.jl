@@ -13,7 +13,7 @@ import Base: show, showable, iterate, eltype, IteratorSize, map
 
 export value, children, isleaf, leafs, depth
 export SimpleTree, TikzQTree, qtree, @qtree
-export matrix_to_tree, plot_jazz_tree
+export plot_jazz_tree, read_jazz_tree
 
 include("trees.jl")
 include("qtree_from_expr.jl")

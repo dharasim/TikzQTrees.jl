@@ -35,8 +35,12 @@ function trim_unary_chains!(tree)
     tree
 end
 
-function matrix_to_tree(table::Matrix)
-    trim_unary_chains!(create_tree_node(table, size(table, 1), 1))
+function qtree(table::AbstractMatrix; align_leafs=false, title=nothing)
+    TikzQTree(
+        trim_unary_chains!(create_tree_node(table, size(table, 1), 1)),
+        align_leafs=align_leafs,
+        title=title
+    )
 end
 
 ################################
@@ -62,20 +66,39 @@ function convert_jazz_notation(jazz_chord::Union{AbstractString,Missing})
         "#"     => "\\sharp "
     )
 
-    latexstring(replace_all(jazz_chord, replacements))
+    latexstring(
+        replace(
+            replace_all(jazz_chord, replacements),
+            r"_(\w+)" => s"_{\1}"
+        )
+    )
 end
 
-function plot_jazz_tree(csv_file::AbstractString)
-    name = splitext(splitdir(csv_file)[2])[1]
+function read_jazz_tree(csv_file::AbstractString)
+    title = splitext(splitdir(csv_file)[2])[1]
+    table = Matrix(CSV.read(csv_file, delim=';', datarow=3))
 
-    table = CSV.read(csv_file, delim=';', datarow=3) |>
-        Matrix |>
-        M -> M[:,1:findfirst(ismissing, M[2,:])-1] .|>
-        convert_jazz_notation
+    m = let k = findfirst(ismissing, table[:,1])
+        k === nothing ? size(table, 1) : k-1
+    end
+    n = let k = findfirst(ismissing, table[2,:])
+        k === nothing ? size(table, 2) : k-1
+    end
 
-    tree = matrix_to_tree(table)
-
-    tp = TikzPicture(TikzQTree(tree, align_leafs=true, title=name))
-
-    save(PDF(name), tp)
+    qtree(
+        map(convert_jazz_notation, table[1:m, 1:n]),
+        align_leafs=true,
+        title=title
+    )
 end
+
+function plot_jazz_tree(csv_file::AbstractString; format=:pdf)
+    formats = (pdf=PDF, svg=SVG, tex=TEX, tikz=TIKZ)
+    tree = read_jazz_tree(csv_file)
+    save(getproperty(formats, format)(tree.title), TikzPicture(tree))
+end
+
+
+match(r"_(\w+)", "I_Bb")
+
+replace("(I_Bb,V_Bb)", r"_(\w+)" => s"_{\1}")
