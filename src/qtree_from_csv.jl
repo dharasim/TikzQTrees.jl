@@ -60,23 +60,30 @@ function convert_jazz_notation(jazz_chord::Union{AbstractString,Missing})
     replacements = tuple(
         "^7"    => "^\\triangle",
         r"\^$"  => "",
+        r"\^\s" => " ",
         "7"     => "^7",
         "6"     => "^6",
         "%"     => "\\emptyset",
         "#"     => "\\sharp ",
-        "b"     => "\\flat"
+        "b"     => "\\flat ",
+        " ^"   => "^"
     )
 
-    latexstring(
+    lts = latexstring(
         replace(
             replace_all(jazz_chord, replacements),
             r"_(\w+)" => s"_{\1}"
         )
     )
+
+    string('{', lts, '}')
 end
 
-function read_jazz_tree(csv_file::AbstractString)
-    title = splitext(splitdir(csv_file)[2])[1]
+function read_jazz_tree(
+        csv_file::AbstractString;
+        align_leafs=true, title=splitext(splitdir(csv_file)[2])[1]
+    )
+
     table = Matrix(CSV.read(csv_file, delim=';', datarow=3))
 
     m = let k = findfirst(ismissing, table[:,1])
@@ -88,16 +95,18 @@ function read_jazz_tree(csv_file::AbstractString)
 
     qtree(
         map(convert_jazz_notation, table[1:m, 1:n]),
-        align_leafs=true,
-        title=title
+        align_leafs=align_leafs, title=title
     )
 end
 
-function plot_jazz_tree(csv_file::AbstractString; format=:pdf)
+function plot_jazz_tree(csv_file::AbstractString;
+        format=:pdf, align_leafs=true, title=splitext(splitdir(csv_file)[2])[1]
+    )
+
     formats = (pdf=PDF, svg=SVG, tex=TEX, tikz=TIKZ)
     save(
         getproperty(formats, format)(splitext(csv_file)[1]),
-        TikzPicture(read_jazz_tree(csv_file))
+        TikzPicture(read_jazz_tree(csv_file, align_leafs=align_leafs, title=title))
     )
 end
 
